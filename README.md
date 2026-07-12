@@ -102,13 +102,49 @@ Abre `Challenge_Alura_Agente.ipynb` y ejecuta las celdas en orden.
 
 ---
 
-## Pipeline RAG
+## Arquitectura de la Solucion
 
+El sistema implementa un flujo RAG (Retrieval-Augmented Generation) clásico con las siguientes etapas:
+
+1. **Ingesta y Procesamiento (ETL):** Los documentos PDF se leen usando `PyMuPDF` y se dividen en fragmentos (chunks) semánticos usando `RecursiveCharacterTextSplitter` de LangChain.
+2. **Indexación Vectorial:** Cada chunk se transforma en un vector (embedding) usando el modelo `embed-multilingual-v3.0` de Cohere y se almacena en `ChromaDB`.
+3. **Recuperación (Retrieval):** Ante una pregunta del usuario, el sistema busca los chunks más relevantes en la base vectorial mediante búsqueda semántica.
+4. **Generación (Generation):** Se construye un prompt con la pregunta y el contexto recuperado, enviándolo al LLM (`command-r-plus-08-2024` de Cohere) para generar una respuesta en lenguaje natural citando las fuentes.
+
+```mermaid
+graph LR
+    A[PDFs] --> B(Extraccion)
+    B --> C(Chunking)
+    C --> D[Embeddings Cohere]
+    D --> E[(ChromaDB)]
+    F[Usuario] --> G(Pregunta)
+    G --> H[Recuperacion]
+    H --> E
+    E --> I[Contexto]
+    I --> J(LLM Cohere)
+    G --> J
+    J --> K[Respuesta con Fuentes]
 ```
-PDFs → Extraccion (PyMuPDF) → Chunking (LangChain) → Embeddings (Cohere)
-                                                              ↓
-Pregunta del usuario → Retriever (ChromaDB) → LLM (Cohere) → Respuesta + Fuentes
-```
+
+---
+
+## Ejemplos de Uso
+
+### Ejemplos de preguntas que el agente puede responder:
+- *"¿Cómo puedo solicitar el reembolso de un producto dañado?"*
+- *"¿Cuáles son los tiempos de entrega para envíos internacionales?"*
+- *"¿Qué porcentaje de comisión gano en el programa de afiliados?"*
+- *"¿Aceptan pagos con criptomonedas o PayPal?"*
+- *"¿Cuánto tiempo de garantía tiene un teléfono móvil?"*
+
+### Ejemplos de respuestas generadas por el agente:
+
+**Pregunta:** *¿Cómo puedo solicitar el reembolso de un producto dañado?*
+
+**Respuesta generada:**
+> Para solicitar el reembolso de un producto dañado, debes comunicarte con el área de soporte al cliente dentro de los primeros 7 días posteriores a la recepción del pedido. Es necesario proporcionar fotografías claras del daño y el número de orden. Una vez aprobado, el reembolso se procesará al método de pago original en un plazo de 3 a 5 días hábiles.
+> 
+> *Fuente: [Fuente 1: Politica_Reembolsos_NexusEcom.pdf | politicas]*
 
 ---
 
