@@ -7,7 +7,12 @@
 ![LangChain](https://img.shields.io/badge/Framework-LangChain-green)
 ![ChromaDB](https://img.shields.io/badge/VectorDB-ChromaDB-purple)
 ![Streamlit](https://img.shields.io/badge/UI-Streamlit-red)
-![OCI](https://img.shields.io/badge/Deploy-Oracle_Cloud-blue)
+
+## 🌐 Aplicación en Vivo
+
+Prueba el asistente RAG corporativo directamente desde tu navegador:
+
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://challenge-alura-agente-jjs2cenbgnt548arbyljcw.streamlit.app/)
 
 ---
 
