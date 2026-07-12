@@ -1,0 +1,61 @@
+# ============================================================
+# Challenge Alura Agente — .gitignore
+# ============================================================
+
+# --- Entorno virtual Python ---
+Alura Agente/
+venv/
+.venv/
+env/
+*.egg-info/
+
+# --- Variables de entorno (NUNCA subir al repo) ---
+.env
+*.env.local
+
+# --- Base vectorial ChromaDB (generada automaticamente) ---
+chroma_db/
+
+# --- Logs ---
+logs/
+*.log
+
+# --- Jupyter Notebooks checkpoints ---
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg
+dist/
+build/
+*.spec
+
+# --- Documentos privados de NexusEcom ---
+docs/
+
+# --- Archivos del sistema ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- IDEs ---
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# --- Testing ---
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- Archivos temporales ---
+*.tmp
+*.bak
+*.orig
