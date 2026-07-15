@@ -5,6 +5,14 @@ Proveedor LLM: Cohere (command-r-plus)
 
 import os
 import sys
+
+# Parche para Streamlit Cloud (SQLite compatibility para ChromaDB)
+try:
+    __import__('pysqlite3')
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass
+
 from pathlib import Path
 from dotenv import load_dotenv
 from loguru import logger
@@ -29,10 +37,19 @@ LOGS_DIR.mkdir(exist_ok=True)
 
 # ── Configuracion de Cohere ───────────────────────────────────────────────────
 COHERE_API_KEY = os.getenv("COHERE_API_KEY")
+
+# Soporte para Streamlit Cloud Secrets
+if not COHERE_API_KEY:
+    try:
+        import streamlit as st
+        COHERE_API_KEY = st.secrets.get("COHERE_API_KEY")
+    except Exception:
+        pass
+
 if not COHERE_API_KEY:
     raise ValueError(
         "COHERE_API_KEY no encontrada. "
-        "Edita el archivo .env y agrega tu API Key de Cohere."
+        "Edita el archivo .env o configura los Secrets en Streamlit Cloud."
     )
 
 LLM_MODEL = os.getenv("LLM_MODEL", "command-r-plus-08-2024")
@@ -45,7 +62,7 @@ CHROMA_COLLECTION_NAME = os.getenv("CHROMA_COLLECTION_NAME", "nexusecom_document
 # ── Configuracion de procesamiento ────────────────────────────────────────────
 CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", 1000))
 CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", 200))
-MAX_RETRIEVAL_DOCS = int(os.getenv("MAX_RETRIEVAL_DOCS", 5))
+MAX_RETRIEVAL_DOCS = int(os.getenv("MAX_RETRIEVAL_DOCS", 10))
 
 # ── Configuracion de la interfaz ─────────────────────────────────────────────
 APP_TITLE = os.getenv("APP_TITLE", "Agente NexusEcom")

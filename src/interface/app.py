@@ -124,6 +124,12 @@ def inject_custom_css():
             color: var(--text-main) !important;
         }
         
+        /* Ajuste de tipografías generadas por la IA dentro del chat */
+        .stChatMessage h1 { font-size: 1.4rem !important; margin-top: 1rem !important; margin-bottom: 0.5rem !important; }
+        .stChatMessage h2 { font-size: 1.2rem !important; margin-top: 1rem !important; margin-bottom: 0.5rem !important; color: var(--accent-primary) !important; }
+        .stChatMessage h3 { font-size: 1.1rem !important; margin-top: 0.8rem !important; margin-bottom: 0.5rem !important; }
+        .stChatMessage p, .stChatMessage li { font-size: 0.95rem !important; line-height: 1.6 !important; }
+        
         /* Avatares tech */
         [data-testid="stChatMessageAvatarUser"] {
             background: linear-gradient(135deg, #FF7B00, #ff4000) !important;
@@ -224,6 +230,7 @@ def main():
         st.caption("⚡ Desarrollado por el **Tech AI Builder Danny Gonzalez**")
         
         if st.button("🔄 Reiniciar Terminal", use_container_width=True):
+            st.cache_resource.clear()
             st.session_state.messages = []
             st.rerun()
 
@@ -245,14 +252,19 @@ def main():
             st.markdown(msg["content"])
             if "sources" in msg and msg["sources"]:
                 with st.expander("🔎 Analizar orígenes de datos (Fuentes)"):
-                    for i, doc in enumerate(msg["sources"]):
-                        source_name = doc.metadata.get('source', 'nodo_desconocido')
-                        st.markdown(f"""
-                        <div class="source-card">
-                            <div class="source-meta">EXTRACCIÓN {i+1} | ORIGEN: {source_name}</div>
-                            {doc.page_content[:350]}...
-                        </div>
-                        """, unsafe_allow_html=True)
+                    # Filtrar duplicados basados en el contenido
+                    unique_docs = []
+                    seen_content = set()
+                    for doc in msg["sources"]:
+                        if doc.page_content not in seen_content:
+                            unique_docs.append(doc)
+                            seen_content.add(doc.page_content)
+                            
+                    for i, doc in enumerate(unique_docs):
+                        archivo = doc.metadata.get("archivo", "nodo_desconocido")
+                        categoria = doc.metadata.get("categoria", "N/A")
+                        with st.expander(f"**EXTRACCIÓN {i+1}** | ARCHIVO: {archivo}"):
+                            st.markdown(f"**[{categoria.upper()}]** • {doc.page_content}")
 
     if prompt := st.chat_input("Ingresa tu consulta (Ej: ¿Cuál es el tiempo de envío?)..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
@@ -265,26 +277,33 @@ def main():
                 try:
                     response, source_docs = rag.query(prompt)
                     
-                    # Efecto de máquina de escribir simulado (opcional para look tech)
+                    # Efecto de máquina de escribir simulado respetando saltos de línea
                     placeholder = st.empty()
                     full_response = ""
-                    # Stream simulado
-                    for chunk in response.split():
-                        full_response += chunk + " "
+                    import re
+                    # Dividir preservando los espacios y saltos de línea reales
+                    chunks = re.split(r'(\s+)', response)
+                    for chunk in chunks:
+                        full_response += chunk
                         time.sleep(0.015)
                         placeholder.markdown(full_response + "▌")
                     placeholder.markdown(full_response)
                     
                     if source_docs:
+                        # Filtrar duplicados basados en el contenido
+                        unique_docs = []
+                        seen_content = set()
+                        for doc in source_docs:
+                            if doc.page_content not in seen_content:
+                                unique_docs.append(doc)
+                                seen_content.add(doc.page_content)
+                                
                         with st.expander("🔎 Analizar orígenes de datos (Fuentes)"):
-                            for i, doc in enumerate(source_docs):
-                                source_name = doc.metadata.get('source', 'nodo_desconocido')
-                                st.markdown(f"""
-                                <div class="source-card">
-                                    <div class="source-meta">EXTRACCIÓN {i+1} | ORIGEN: {source_name}</div>
-                                    {doc.page_content[:350]}...
-                                </div>
-                                """, unsafe_allow_html=True)
+                            for i, doc in enumerate(unique_docs):
+                                archivo = doc.metadata.get("archivo", "nodo_desconocido")
+                                categoria = doc.metadata.get("categoria", "N/A")
+                                with st.expander(f"**EXTRACCIÓN {i+1}** | ARCHIVO: {archivo}"):
+                                    st.markdown(f"**[{categoria.upper()}]** • {doc.page_content}")
                     
                     st.session_state.messages.append({
                         "role": "assistant", 
@@ -294,7 +313,7 @@ def main():
                     
                 except Exception as e:
                     logger.error(f"Error: {e}")
-                    st.error("Fallo en la comunicación con el servidor LLM.")
+                    st.error(f"Fallo en la comunicación con el servidor LLM. Detalles técnicos del error: {str(e)}")
 
 if __name__ == "__main__":
     main()

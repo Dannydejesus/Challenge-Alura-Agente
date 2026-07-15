@@ -13,8 +13,8 @@ env/
 .env
 *.env.local
 
-# --- Base vectorial ChromaDB (generada automaticamente) ---
-chroma_db/
+# --- Base vectorial ChromaDB (descomentado para despliegue en Streamlit Cloud) ---
+# chroma_db/
 
 # --- Logs ---
 logs/
