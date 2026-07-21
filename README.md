@@ -162,13 +162,13 @@ graph LR
 
 - [x] Fase 0 — Setup y configuracion del entorno
 - [x] Fase 1 — Colecta y organizacion de documentos
-- [ ] Fase 2 — Procesamiento y extraccion de contenido
-- [ ] Fase 3 — Indexacion vectorial en ChromaDB
-- [ ] Fase 4 — Capa RAG de recuperacion
-- [ ] Fase 5 — Generacion de respuestas con Cohere
-- [ ] Fase 6 — Interfaz Streamlit
-- [ ] Fase 7 — Deploy en Oracle Cloud Infrastructure
-- [ ] Fase 8 — Registro y cierre del challenge
+- [x] Fase 2 — Procesamiento y extraccion de contenido
+- [x] Fase 3 — Indexacion vectorial en ChromaDB
+- [x] Fase 4 — Capa RAG de recuperacion
+- [x] Fase 5 — Generacion de respuestas con Cohere
+- [x] Fase 6 — Interfaz Streamlit
+- [x] Fase 7 — Deploy en Oracle Cloud Infrastructure
+- [x] Fase 8 — Registro y cierre del challenge
 
 ---
 
