@@ -59,3 +59,9 @@ htmlcov/
 *.tmp
 *.bak
 *.orig
+
+# --- Archivos de despliegue pesados ---
+deploy.tar.gz
+deploy.zip
+*.tar.gz
+*.zip

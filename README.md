@@ -7,11 +7,16 @@
 ![LangChain](https://img.shields.io/badge/Framework-LangChain-green)
 ![ChromaDB](https://img.shields.io/badge/VectorDB-ChromaDB-purple)
 ![Streamlit](https://img.shields.io/badge/UI-Streamlit-red)
+![OCI](https://img.shields.io/badge/Cloud-Oracle_OCI-C74634?logo=oracle)
 
 ## 🌐 Aplicación en Vivo
 
 Prueba el asistente RAG corporativo directamente desde tu navegador:
 
+**🚀 Despliegue Principal en Producción (Oracle Cloud - OCI)**
+[![Open in OCI](https://img.shields.io/badge/Despliegue-Oracle_Cloud_(OCI)-red?style=for-the-badge&logo=oracle)](http://157.137.217.80:8501/)
+
+**☁️ Despliegue Secundario (Streamlit Community Cloud)**
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://challenge-alura-agente-jjs2cenbgnt548arbyljcw.streamlit.app/)
 
 ---

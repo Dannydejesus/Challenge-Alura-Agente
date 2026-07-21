@@ -226,6 +226,7 @@ def main():
             * `sys.soporte.garantias`
             """)
         
+        
         st.markdown("---")
         st.caption("⚡ Desarrollado por el **Tech AI Builder Danny Gonzalez**")
         
